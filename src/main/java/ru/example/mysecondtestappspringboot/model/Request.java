@@ -14,20 +14,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Request {
-    @NotBlank()
-    @Size(max = 32)
+    @NotBlank(message = "uid не может быть пустым")
+    @Size(max = 32, message = "uid не должен превышать 32 символа")
     private String uid;
-    @NotBlank
-    @Size(max = 32)
+    @NotBlank(message = "operationUid не может быть пустым")
+    @Size(max = 32, message = "operationUid не может превышать 32 символа")
     private String operationUid;
-    private String systemName;
-    @NotBlank
+    private Systems systemName;
+    @NotBlank(message = "systemTime не может быть пустым")
     private String systemTime;
     private String source;
-    @Min(1)
-    @Max(100000)
+    @Min(value = 1, message = "communicationId не может быть меньше 1")
+    @Max(value = 100000, message = "communicationId не может быть больше 100000")
     private int communicationId;
     private int templateId;
     private int productCode;
     private int smsCode;
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "uid='" + uid + '\'' +
+                ", operationUid='" + operationUid + '\'' +
+                ", systemName='" + systemName + '\'' +
+                ", systemTime='" + systemTime + '\'' +
+                ", source='" + source + '\'' +
+                ", communicationId=" + communicationId +
+                ", templateId=" + templateId +
+                ", productCode=" + productCode +
+                ", smsCode=" + smsCode +
+                '}';
+    }
 }
