@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.example.mysecondtestappspringboot.exeption.UnsupportedCodeException;
 import ru.example.mysecondtestappspringboot.exeption.ValidationFailedException;
 import ru.example.mysecondtestappspringboot.model.*;
+import ru.example.mysecondtestappspringboot.service.ModifyRequestService;
 import ru.example.mysecondtestappspringboot.service.ModifyResponseService;
 import ru.example.mysecondtestappspringboot.service.ValidationService;
 import ru.example.mysecondtestappspringboot.util.DateTimeUtil;
@@ -24,11 +25,14 @@ import java.util.Date;;
 public class MyController {
     private final ValidationService validationService;
     private final ModifyResponseService modifyResponseService;
+    private final ModifyRequestService modifyRequestService;
     @Autowired
     public MyController(ValidationService validationService,
-                        @Qualifier("ModifyOperationUidResponseService") ModifyResponseService modifyResponseService) {
+                        @Qualifier("ModifyOperationUidResponseService") ModifyResponseService modifyResponseService,
+                        @Qualifier("ModifySystemNameRequestService") ModifyRequestService modifyRequestService) {
         this.validationService = validationService;
         this.modifyResponseService = modifyResponseService;
+        this.modifyRequestService = modifyRequestService;
     }
 
     @PostMapping("/feedback")
@@ -45,6 +49,7 @@ public class MyController {
                 .errorCode(ErrorCode.EMPTY)
                 .errorMessage(ErrorMessage.EMPTY)
                 .build();
+        request.setSystemTime(response.getSystemTime());
 
         log.info("response {}", response);
 
@@ -80,6 +85,7 @@ public class MyController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         modifyResponseService.modify(response);
+        modifyRequestService.modify(request);
 
         log.info("response {}", response);
 
