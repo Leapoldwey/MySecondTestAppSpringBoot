@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.example.mysecondtestappspringboot.exeption.UnsupportedCodeException;
 import ru.example.mysecondtestappspringboot.exeption.ValidationFailedException;
 import ru.example.mysecondtestappspringboot.model.*;
+import ru.example.mysecondtestappspringboot.service.DifferenceTime;
 import ru.example.mysecondtestappspringboot.service.ModifyResponseService;
 import ru.example.mysecondtestappspringboot.service.ValidationService;
 import ru.example.mysecondtestappspringboot.util.DateTimeUtil;
@@ -24,6 +25,7 @@ import java.util.Date;;
 public class MyController {
     private final ValidationService validationService;
     private final ModifyResponseService modifyResponseService;
+
     @Autowired
     public MyController(ValidationService validationService,
                         @Qualifier("ModifyOperationUidResponseService") ModifyResponseService modifyResponseService) {
@@ -47,6 +49,8 @@ public class MyController {
                 .build();
 
         log.info("response {}", response);
+
+        DifferenceTime.difference(request, response);
 
         try {
             validationService.isValid(bindingResult);
